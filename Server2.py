@@ -1,7 +1,6 @@
 import socket
 import threading
 
-
 class Server:
         sock =socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         connections = []
@@ -20,9 +19,11 @@ class Server:
                 if not data:
                     break
 
+
         def run(self):
             while True:
                 conn, addr = self.sock.accept()
+                conn.send('You are connected'.encode('utf-8'))
                 hThread=threading.Thread(target=self.handler, args = (conn, addr))
                 hThread.daemon = True
                 hThread.start()

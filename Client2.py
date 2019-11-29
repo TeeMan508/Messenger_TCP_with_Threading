@@ -8,7 +8,7 @@ class Client:
 
     def send_data(self):
          while True:
-            self.sock.send(input("Input your message").encode('utf-8'))
+            self.sock.send(input("Input Your message: ").encode('utf-8'))
             print('data sent')
 
     def __init__(self, address):
@@ -17,16 +17,14 @@ class Client:
         iThread.daemon = True
         iThread.start()
         while True:
-            iThread.join()
+            #iThread.join()
             data = self.sock.recv(1024)
-
-
             if not data:
                   #print('No data')
                   break
-
             print('data received')
             print(data.decode('utf-8'))
+
 
 my_client = Client('192.168.0.70')
 
