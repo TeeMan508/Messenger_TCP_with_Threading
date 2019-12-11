@@ -1,33 +1,36 @@
 import socket
 import threading
-import time
+import datetime
 
 
 class Client:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def rec_data(self):
+        while True:
+            data = self.sock.recv(1024)
+            print()
+            print(data.decode('utf-8'))
 
     def send_data(self):
          while True:
-            self.sock.send(input("Input Your message: ").encode('utf-8'))
-            print('data sent')
+            self.sock.send((str(datetime.datetime.now()) + ' ' + self.name + '(' + self.address + ')' + ' said: ' + input("Input Your message: ")).encode('utf-8'))
+            #print('data sent')
+
 
     def __init__(self, address):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((address, 9090))
-        iThread = threading.Thread(target=self.send_data())
-        iThread.daemon = True
-        iThread.start()
-        while True:
-            #iThread.join()
-            data = self.sock.recv(1024)
-            if not data:
-                  #print('No data')
-                  break
-            print('data received')
-            print(data.decode('utf-8'))
+        self.name = input("Input your name: ")
+        self.address = address
 
 
-my_client = Client('192.168.0.70')
+    def run(self):
+            threading.Thread(target=self.rec_data, daemon=False).start()
+            threading.Thread(target=self.send_data).start()
 
 
 
+
+my_client = Client('127.0.0.1')
+my_client.run()
 
